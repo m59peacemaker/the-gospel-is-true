@@ -4,11 +4,10 @@ container = ${project}
 this_dir = $(shell pwd)
 
 ssh:
-	@ssh root@45.55.167.191
+	@ssh root@104.236.124.170
 
 build:
 	@docker build -t ${image} .
-
 
 up = docker run -d        \
   --name ${container}     \
@@ -17,11 +16,13 @@ up = docker run -d        \
   -v ${this_dir}/nginx.conf:/etc/nginx/nginx.conf \
   ${image}
 
-up: clean
-	@${up}
+clean = docker rm -f ${container}
+
+up:
+	@${clean}; ${up}
 
 clean:
-	@docker rm -f ${container}
+	@${clean}
 
 shell:
 	@docker exec -it ${container} /bin/bash
